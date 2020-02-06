@@ -41,19 +41,19 @@
  *   RELEASE NOTES
  *   =============
  *
- *   20-01-20  v1.0.
+ *   20-01-20  v1.0 (200120).
  *             Initial live release.
  *
- *   31-01-20  v1.1.
+ *   31-01-20  v1.1 (200131).
  *             Forward compatible to using applications.
  *             CLibExceptions : Installed ShowMessageBox() method.
  *
- *   04-02-20  v1.2.
+ *   04-02-20  v1.2 (200204).
  *             Added software ReleaseDate and VersionCode properties.
  *
- *   06-02-20  v1.3.
+ *   06-02-20  v1.3 (200206).
  *             Installed FxCopAnalyzers package.
- *             Began modifying code to bring up to FxCop standard.
+ *             Modified source code to bring up to FxCop standard.
  */
 
 //----------------------------------------------------------------------------
