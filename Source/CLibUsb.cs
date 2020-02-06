@@ -110,7 +110,7 @@ public static ManagementObject GetUsbDeviceInfo (string strNeedle)
                strValue = obj ["Name"].ToString () ;
           }
           catch (ManagementException)  { continue ; }
-     // Check if found a device whose Name property contains the target string
+     // Check if found a device whose Name property contains the string haystack
           if (strValue.StartsWith (strNeedle, StringComparison.InvariantCultureIgnoreCase))
           {
                manobj = obj ;
@@ -137,7 +137,7 @@ public static ManagementObject GetUsbDeviceInfo (string strNeedle)
  *
  *   See https://docs.microsoft.com/en-us/windows/win32/cimwin32prov/win32-pnpentity
  */
-public string GetUsbDeviceName (string strComPort)
+public static string GetUsbDeviceName (string strComPort)
 {
      string    strName ;
      string    strCom ;
@@ -182,14 +182,18 @@ public string GetUsbDeviceName (string strComPort)
 //============================================================================
 //                                                           GetPropertyString
 //----------------------------------------------------------------------------
-public string GetPropertyString (ManagementObject property, string strKey)
+public static string GetPropertyString (ManagementObject oProperty, string strKey)
 {
      object    mbobj ;
+
+// Throw exception if management object reference is null
+     if (oProperty == null)
+          throw new ArgumentNullException ($"oProperty", Resources.Strings.ExNullParam) ;
 
 // Attempt to get the property of the management object using the supplied key
      try
      {
-          mbobj = property.GetPropertyValue (strKey) ;
+          mbobj = oProperty.GetPropertyValue (strKey) ;
      }
      catch (ManagementException)
      {
@@ -208,7 +212,7 @@ public string GetPropertyString (ManagementObject property, string strKey)
 //----------------------------------------------------------------------------
 // Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\USB\VID_2341&PID_804D&MI_00\6&32a6ff44&0&0000
 // manobj.Path.RelativePath = "Win32_PnPEntity.DeviceID="USB\\VID_2341&PID_804D&MI_00\\6&32A6FF44&0&0000""
-public string GetDeviceAttribute (ManagementObject oManObj, string strKey)
+public static string GetDeviceAttribute (ManagementObject oManObj, string strKey)
 {
      Int32     iStart ;
      string    strDeviceId ;
@@ -220,18 +224,24 @@ public string GetDeviceAttribute (ManagementObject oManObj, string strKey)
 
      char [] acQuote = { '"' } ;
 
+// Throw exception if management object reference is null
+     if (oManObj == null)
+          throw new ArgumentNullException ($"oManObj", Resources.Strings.ExNullParam) ;
+
 // Init
      strValue = null ;
      rkBase   = null ;
      rkEntry  = null ;
 // Access the registry path "Win32_PnPEntity.DeviceID="USB\\VID_xxxx&PID_xxxx&MI_xx\\x&xxxxxxxxxx&x&xxxx""
-     strPath = oManObj.Path.RelativePath.ToString () ;
-     if (! strPath.StartsWith ("Win32_PnPEntity"))
+     strPath = $"{oManObj.Path.RelativePath}" ;
+     if (! strPath.StartsWith ("Win32_PnPEntity", StringComparison.InvariantCultureIgnoreCase))
           goto exit_function ;
+
 // Extract the embedded registry path to the physical device being plugged in
      iStart = strPath.IndexOf ("DeviceID=", StringComparison.InvariantCultureIgnoreCase) ;
      if (iStart < 15)
           goto exit_function ;
+
      strDeviceId = strPath.Substring (iStart + 10) ;
      strDeviceId = strDeviceId.TrimEnd (acQuote) ;
 // Locate entry in Registry
@@ -269,18 +279,24 @@ public Boolean SetDeviceAttribute (ManagementObject oManObj, string strKey, stri
 
      char [] acQuote = { '"' } ;
 
+// Throw exception if management object reference is null
+     if (oManObj == null)
+          throw new ArgumentNullException ($"oManObj", Resources.Strings.ExNullParam) ;
+
 // Init
      bfSuccess  = false ;
      rkBase     = null ;
      rkEntry    = null ;
      ErrMessage = null ;
 // Returns "Win32_PnPEntity.DeviceID="USB\\VID_2341&PID_804D&MI_00\\6&32A6FF44&0&0000""
-     strPath = oManObj.Path.RelativePath.ToString () ;
-     if (! strPath.StartsWith ("Win32_PnPEntity"))
+     strPath = $"{oManObj.Path.RelativePath}" ;
+     if (! strPath.StartsWith ("Win32_PnPEntity", StringComparison.InvariantCultureIgnoreCase))
           goto exit_function ;
+
      iStart = strPath.IndexOf ("DeviceID=", StringComparison.InvariantCultureIgnoreCase) ;
      if (iStart < 15)
           goto exit_function ;
+
      strDeviceId = strPath.Substring (iStart + 10) ;
      strDeviceId = strDeviceId.TrimEnd (acQuote) ;
 // Locate entry in Registry

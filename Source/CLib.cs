@@ -50,6 +50,10 @@
  *
  *   04-02-20  v1.2.
  *             Added software ReleaseDate and VersionCode properties.
+ *
+ *   06-02-20  v1.3.
+ *             Installed FxCopAnalyzers package.
+ *             Began modifying code to bring up to FxCop standard.
  */
 
 //----------------------------------------------------------------------------

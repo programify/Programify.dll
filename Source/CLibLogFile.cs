@@ -175,7 +175,7 @@ public void NameChange ()
 //============================================================================
 //                                                                        Open
 //----------------------------------------------------------------------------
-public Boolean Open ()
+public static Boolean Open ()
 {
      return true ;
 }
@@ -186,6 +186,11 @@ public Boolean Open ()
 //----------------------------------------------------------------------------
 public Boolean Write (string strTitle, CLibExceptions oEx)
 {
+// Throw exception if management object reference is null
+     if (oEx == null)
+          throw new ArgumentNullException ($"oProperty", Resources.Strings.ExNullParam) ;
+
+// Multi-line write of formatted exception information
      if (! Write ($"{strTitle} Exception Event"))
           goto exit_method ;
      if (! Write ($"Cause     : {oEx.Cause}"))
