@@ -10,6 +10,9 @@
 //****************************************************************************
 /*
  *   21-12-19  Added this module to the project.
+ *
+ *   06-02-20  v1.4.
+ *             ConvertDpiMetric() now throws exceptions on null argument.
  */
 
 //----------------------------------------------------------------------------
@@ -45,7 +48,7 @@ internal static class NativeMethods
 //****************************************************************************
 //                                                                       Class
 //****************************************************************************
-public class CLibForm
+public static class CLibForm
 {
 
 
@@ -140,6 +143,10 @@ public static int ConvertDpiMetric (Form oForm, int iMetric, int iOrigDpi)
      float     fOrigDpi ;
 
      Graphics  graphics ;
+
+// Throw exception if form reference is null
+     if (oForm == null)
+          throw new ArgumentNullException ($"oForm", Resources.Strings.ExNullParam) ;
 
 // Get DPI of the current monitor
      graphics = oForm.CreateGraphics () ;

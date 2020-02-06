@@ -11,6 +11,9 @@
 //****************************************************************************
 /*
  *   28-12-19  Added this module to the project.
+ *
+ *   v1.3
+ *   06-02-20  GetUsbDeviceInfo() now releases resources correctly.
  */
 
 //----------------------------------------------------------------------------
@@ -83,34 +86,40 @@ private   Series.Exception    ErrException { get => meErrException ; set => meEr
  *   should be unique enough to identify the desired device or its class of
  *   devices.
  */
-public ManagementObject GetUsbDeviceInfo (string strNeedle)
+public static ManagementObject GetUsbDeviceInfo (string strNeedle)
 {
      string    strValue ;
 
+     ManagementObject          manobj ;
      ManagementObjectSearcher  searcher ;
      ObjectQuery               objquery ;
 
+// Init
+     manobj = null ;
 // Construct a query for Plug and Play devices in the "Ports" class
      objquery = new ObjectQuery ("select * from WIN32_PnPEntity where PNPClass=\"Ports\"") ;
 // Open an object searcher using the query
      searcher = new ManagementObjectSearcher (objquery) ;
 
 // Enumerate objects that have been selected by the query
-     foreach (ManagementObject manobj in searcher.Get ())
+     foreach (ManagementObject obj in searcher.Get ())
      {
      // Extract the device's full name
           try
           {
-               strValue = manobj ["Name"].ToString () ;
+               strValue = obj ["Name"].ToString () ;
           }
           catch (ManagementException)  { continue ; }
      // Check if found a device whose Name property contains the target string
           if (strValue.StartsWith (strNeedle, StringComparison.InvariantCultureIgnoreCase))
-               return manobj ;
+          {
+               manobj = obj ;
+               break ;
+          }
      }
-
-// Failed to locate named device
-     return null ;
+// Release resources
+     searcher.Dispose () ;
+     return manobj ;
 }
 
 

@@ -1,8 +1,7 @@
 ﻿//****************************************************************************
 //
 //   (c) Programify Ltd
-//   Class Library
-//   Versioning & Release Notes                                        CLib.cs
+//   Class Library : Common Functions                            CLibCommon.cs
 //
 //****************************************************************************
 
@@ -10,30 +9,7 @@
 //                                                                Developments
 //****************************************************************************
 /*
- *   VERSIONS
- *   ========
- *
- *        Product Name : Programify.dll
- *
- *        Release      Product     Size
- *        Date         Version    Bytes
- *        ===========  =======  =======
- *        20-JAN-2020  1.0       44,032
- *        31-JAN-2020  1.1
- *
- *
- *   RELEASE NOTES
- *   =============
- *
- *   20-01-20  v1.0.
- *             Initial live release.
- *
- *   31-01-20  v1.1.
- *             Forward compatible to using applications.
- *             CLibExceptions : Installed ShowMessageBox() method.
- *
- *   04-02-20  v1.2.
- *             Added software ReleaseDate and VersionCode properties.
+ *   17-01-20  Added this module to the project.
  */
 
 //----------------------------------------------------------------------------
@@ -57,20 +33,64 @@ namespace Programify
 //****************************************************************************
 //                                                                       Class
 //****************************************************************************
-public class CLib
+public static class CLibCommon
 {
+//--------------------------------------------------------------------- Public
 
+//-------------------------------------------------------------------- Private
+
+// Static
+
+private static string mstrErrMessage ;
+
+// Enums
+
+// Objects
+
+// Locks
+
+//-------------------------------------------------------- Volatile Properties
+
+// Static
+
+// Enums
+
+// Objects
 
 //----------------------------------------------------------------- Properties
+/*
+ *   ErrorMessage        Error message string generated during exception event.
+ */
 
-public static  string    ReleaseDate    { get => "200204" ; }
-public static  string    VersionCode    { get => "1.2" ; }
+public static  string    ErrorMessage  { get => mstrErrMessage ; }
 
 
 //****************************************************************************
 //                                                                     Methods
 //****************************************************************************
 
+
+//============================================================================
+//                                                              SetCultureInfo
+//----------------------------------------------------------------------------
+public static Boolean SetCultureInfo (out CultureInfo oCulture, string strCulture)
+{
+     Boolean   bfSuccess ;
+
+// Init
+     bfSuccess = false ;
+     oCulture  = null ;
+// Create object on heap
+     try
+     {
+          oCulture  = new CultureInfo (strCulture) ;
+          bfSuccess = true ;
+     }
+     catch (ArgumentNullException ex)     { mstrErrMessage = ex.Message ; }
+     catch (CultureNotFoundException ex)  { mstrErrMessage = ex.Message ; }
+
+     return bfSuccess ;
+}
 
 
 //****************************************************************************

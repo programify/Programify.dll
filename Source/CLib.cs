@@ -1,15 +1,55 @@
 ﻿//****************************************************************************
 //
 //   (c) Programify Ltd
-//   Class Library : Common Functions                            CLibCommon.cs
+//   Class Library
+//   Versioning & Release Notes                                        CLib.cs
 //
 //****************************************************************************
+
+//****************************************************************************
+//                                                          Installed Packages
+//****************************************************************************
+/*
+ *   Microsoft.CodeAnalysis.FxCopAnalyzers
+ *   v2.9.8
+ *
+ *   Microsoft recommended code quality rules and .NET API usage rules, 
+ *   including the most important FxCop rules, implemented as analyzers using 
+ *   the .NET Compiler Platform (Roslyn). These analyzers check your code for 
+ *   security, performance, and design issues, among others. The documentation 
+ *   for FxCop analyzers can be found at:
+ *
+ *   https://docs.microsoft.com/visualstudio/code-quality/install-fxcop-analyzers
+ */
 
 //****************************************************************************
 //                                                                Developments
 //****************************************************************************
 /*
- *   17-01-20  Added this module to the project.
+ *   VERSIONS
+ *   ========
+ *
+ *        Product Name : Programify.dll
+ *
+ *        Release      Product     Size
+ *        Date         Version    Bytes
+ *        ===========  =======  =======
+ *        20-JAN-2020  1.0       44,032
+ *        31-JAN-2020  1.1
+ *
+ *
+ *   RELEASE NOTES
+ *   =============
+ *
+ *   20-01-20  v1.0.
+ *             Initial live release.
+ *
+ *   31-01-20  v1.1.
+ *             Forward compatible to using applications.
+ *             CLibExceptions : Installed ShowMessageBox() method.
+ *
+ *   04-02-20  v1.2.
+ *             Added software ReleaseDate and VersionCode properties.
  */
 
 //----------------------------------------------------------------------------
@@ -33,64 +73,20 @@ namespace Programify
 //****************************************************************************
 //                                                                       Class
 //****************************************************************************
-public class CLibCommon
+public static class CLib
 {
-//--------------------------------------------------------------------- Public
 
-//-------------------------------------------------------------------- Private
-
-// Static
-
-private static string mstrErrMessage ;
-
-// Enums
-
-// Objects
-
-// Locks
-
-//-------------------------------------------------------- Volatile Properties
-
-// Static
-
-// Enums
-
-// Objects
 
 //----------------------------------------------------------------- Properties
-/*
- *   ErrorMessage        Error message string generated during exception event.
- */
 
-public    string    ErrorMessage  { get => mstrErrMessage ; }
+public static  string    ReleaseDate    { get => "200204" ; }
+public static  string    VersionCode    { get => "1.2" ; }
 
 
 //****************************************************************************
 //                                                                     Methods
 //****************************************************************************
 
-
-//============================================================================
-//                                                              SetCultureInfo
-//----------------------------------------------------------------------------
-public static Boolean SetCultureInfo (out CultureInfo oCulture, string strCulture)
-{
-     Boolean   bfSuccess ;
-
-// Init
-     bfSuccess = false ;
-     oCulture  = null ;
-// Create object on heap
-     try
-     {
-          oCulture  = new CultureInfo (strCulture) ;
-          bfSuccess = true ;
-     }
-     catch (ArgumentNullException ex)     { mstrErrMessage = ex.Message ; }
-     catch (CultureNotFoundException ex)  { mstrErrMessage = ex.Message ; }
-
-     return bfSuccess ;
-}
 
 
 //****************************************************************************
